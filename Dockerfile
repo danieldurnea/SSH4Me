@@ -1,5 +1,9 @@
-FROM catub/core:bullseye
+# aa
+FROM parrotsec/core:rolling
 
+MAINTAINER qeeqbox
+
+ENV DEBIAN_FRONTEND=noninteractive
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
 
