@@ -20,10 +20,10 @@ ARG USER root
 ARG NGROK_TOKEN
 ENV NGROK_TOKEN=${NGROK_TOKEN}
 RUN apt install ssh wget unzip -y > /dev/null 2>&1
-RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip > /dev/null 2>&1
+RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip > /dev/null 2>&1
 RUN unzip ngrok.zip
 RUN echo "./ngrok config add-authtoken 2ZpOp9InpvleGDroGQmijpOssI3_47RQ9uSPaBZkULNFS2gmj ${NGROK_TOKEN} &&" >>/kaal.sh
-RUN echo "./ngrok tcp --region in 22 &>/dev/null &" >>/kaal.sh
+RUN echo "./ngrok tcp --region US 22 &>/dev/null &" >>/kaal.sh
 RUN mkdir /run/sshd
 RUN echo '/usr/sbin/sshd -D' >>/kaal.sh
 RUN echo 'PermitRootLogin yes' >>  /etc/ssh/sshd_config 
