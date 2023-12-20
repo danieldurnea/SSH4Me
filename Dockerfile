@@ -41,7 +41,6 @@ ENV LANG en_US.UTF-8
 ENV LC_ALL C.UTF-8
 RUN apt install ssh golang wget unz
 # Start the shell script on container startup
-CMD  /kali.sh
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
 
