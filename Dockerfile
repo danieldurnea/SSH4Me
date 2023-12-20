@@ -1,4 +1,3 @@
-# You can change the base image to any other image you want.
 FROM catub/core:bullseye
 
 ARG AUTH_TOKEN
