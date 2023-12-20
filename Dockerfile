@@ -1,6 +1,6 @@
 FROM kalilinux/kali-rolling
 ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
+ARG PASSWORD
 
 # Install packages and set locale
 RUN apt-get update \
