@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM catub/core:bullseye
 
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
