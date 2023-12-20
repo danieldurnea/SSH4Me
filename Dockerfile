@@ -1,6 +1,47 @@
 # You can change the base image to any other image you want.
-FROM catub/core:bullseye
+FROM ghcr.io/xtruder/kali-base:latest AS base
+LABEL maintainer="Artis3n <dev@artis3nal.com>"
 
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends apt-utils \
+    && apt-get install -y --no-install-recommends amass awscli curl dnsutils \
+    dotdotpwn file finger ffuf gobuster kali-root-login git hydra impacket-scripts john less locate \
+    lsof man-db netcat-traditional nikto nmap proxychains4 python3 python3-pip python3-setuptools \
+    python3-wheel smbclient smbmap socat ssh-client sslscan sqlmap telnet tmux unzip whatweb vim zip \
+    # Slim down layer size
+    && apt-get autoremove -y \
+    && apt-get autoclean -y \
+    # Remove apt-get cache from the layer to reduce container size
+    && rm -rf /var/lib/apt/lists/*
+
+# Second set of installs to slim the layers a bit
+# exploitdb and metasploit are huge packages
+ENV TERM=xterm-256color
+
+
+FROM base AS wordlists
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install Seclis
+# Prepare rockyou wordlist
+
+
+WORKDIR /root
+# install base packages
+RUN apt update -y > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1 && apt install locales -y \
+&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+# configure locales
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_US.UTF-8
+ENV LANG en_US.UTF-8 
+ENV LC_ALL C.UTF-8
+RUN apt install ssh golang wget unz
+# Start the shell script on container startup
+CMD  /kali.sh
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
 
