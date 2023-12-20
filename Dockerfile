@@ -1,7 +1,7 @@
 # You can change the base image to any other image you want.
 FROM ghcr.io/xtruder/kali-base:latest AS base
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
-
+WORKDIR /root
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends apt-utils \
@@ -15,20 +15,6 @@ RUN apt-get update \
     # Remove apt-get cache from the layer to reduce container size
     && rm -rf /var/lib/apt/lists/*
 
-# Second set of installs to slim the layers a bit
-# exploitdb and metasploit are huge packages
-ENV TERM=xterm-256color
-
-
-FROM base AS wordlists
-
-ARG DEBIAN_FRONTEND=noninteractive
-
-# Install Seclis
-# Prepare rockyou wordlist
-
-
-WORKDIR /root
 # install base packages
 RUN apt update -y > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1 && apt install locales -y \
 && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
@@ -39,7 +25,15 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     update-locale LANG=en_US.UTF-8
 ENV LANG en_US.UTF-8 
 ENV LC_ALL C.UTF-8
-RUN apt install ssh golang wget unz
+# Second set of installs to slim the layers a bit
+# exploitdb and metasploit are huge packages
+ENV TERM=xterm-256color
+FROM base AS wordlists
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install Seclis
+# Prepare rockyou wordlist
 # Start the shell script on container startup
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
