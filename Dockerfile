@@ -7,7 +7,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends amass awscli curl dnsutils \
     dotdotpwn file finger ffuf gobuster git hydra impacket-scripts john less locate \
     lsof man-db netcat-traditional nikto nmap proxychains4 python3 python3-pip python3-setuptools \
-    python3-wheel smbclient smbmap socat ssh-client sslscan sqlmap telnet tmux unzip whatweb vim zip \
+    python3-wheel smbclient metasploit golang rust npm smbmap socat ssh-client sslscan sqlmap telnet tmux unzip whatweb vim zip \
     # Slim down layer size
     && apt-get autoremove -y \
     && apt-get autoclean -y \
@@ -23,7 +23,7 @@ RUN apt install ssh wget unzip -y > /dev/null 2>&1
 RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip > /dev/null 2>&1
 RUN unzip ngrok.zip
 RUN echo "./ngrok config add-authtoken 2ZpOp9InpvleGDroGQmijpOssI3_47RQ9uSPaBZkULNFS2gmj ${NGROK_TOKEN} &&" >>/kaal.sh
-RUN echo "./ngrok tcp --region US 22 &>/dev/null &" >>/kaal.sh
+RUN echo "./ngrok tcp 22 &>/dev/null &" >>/kaal.sh
 RUN mkdir /run/sshd
 RUN echo '/usr/sbin/sshd -D' >>/kaal.sh
 RUN echo 'PermitRootLogin yes' >>  /etc/ssh/sshd_config 
@@ -31,5 +31,5 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 RUN echo root:kaal|chpasswd
 RUN service ssh start
 RUN chmod 755 /kaal.sh
-EXPOSE 80 8888 8080 443 5130 5131 5132 5133 5134 5135 3306
+EXPOSE 80 22 8888 8080 443 5130 5131 5132 5133 5134 5135 3306
 CMD /kaal.sh
