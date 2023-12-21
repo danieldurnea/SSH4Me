@@ -1,4 +1,5 @@
-FROM kalilinux/kali-rolling
+FROM ghcr.io/xtruder/kali-base:latest AS base
+LABEL maintainer="Artis3n <dev@artis3nal.com>"
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y locales nano ssh sudo python3 curl wget \
