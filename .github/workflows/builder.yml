@@ -12,5 +12,5 @@ jobs:
       - name: Run SSH4Me Action
         uses: Jisan09/SSH4Me@main
         env:
-          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
           PASSWORD: ${{ secrets.PASSWORD }}
