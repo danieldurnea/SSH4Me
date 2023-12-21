@@ -29,17 +29,24 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     update-locale LANG=en_US.UTF-8
 ENV LANG en_US.UTF-8 
 ENV LC_ALL C.UTF-8
-ARG NGROK_TOKEN
-ARG Password
-ENV Password=${Password}
-ENV NGROK_TOKEN=${NGROK_TOKEN}
+RUN ln -fs /usr/share/zoneinfo/Australia/Brisbane /etc/localtime && \
+  dpkg-reconfigure --frontend noninteractive tzdata
+
+# Easier to access list of nmap scripts
+ARG AUTH_TOKEN
+ARG PASSWORD
+ENV PASSWORD=${PASSWORD}
+ENV AUTH_TOKEN=${AUTH_TOKEN}
+
+# Install ssh, wget, and unzip
+RUN apt install ssh golang wget unzip -y > /dev/null 2>&1
 
 # Download and unzip ngrok
-RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip > /dev/null 2>&1
+RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip > /dev/null 2>&1
 RUN unzip ngrok.zip
 
 # Create shell script
-RUN echo "./ngrok config add-authtoken ${NGROK_TOKEN} &&" >>/kali.sh
+RUN echo "./ngrok config add-authtoken ${AUTH_TOKEN} &&" >>/kali.sh
 RUN echo "./ngrok tcp 22 &>/dev/null &" >>/kali.sh
 
 
@@ -48,12 +55,10 @@ RUN mkdir /run/sshd
 RUN echo '/usr/sbin/sshd -D' >>/kali.sh
 RUN echo 'PermitRootLogin yes' >>  /etc/ssh/sshd_config # Allow root login via SSH
 RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config  # Allow password authentication
-RUN echo root:${Password}|chpasswd # Set root password
+RUN echo root:${PASSWORD}|chpasswd # Set root password
 RUN service ssh start
 RUN chmod 755 /kali.sh
 
 # Expose port
 EXPOSE 80 443 9050 8888 53 9050 8888 3306 8118
-
-# Start the shell script on container startup
-CMD  /kali.sh
+CMD /kali.sh
