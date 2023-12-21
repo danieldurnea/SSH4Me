@@ -1,5 +1,10 @@
 FROM ghcr.io/xtruder/kali-base:latest AS base
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
+ENV GO111MODULE=on
+ENV GOROOT=/usr/local/go
+ENV GOPATH=/go
+ENV PATH=${HOME}/:${GOPATH}/bin:${GOROOT}/bin:${PATH}
+WORKDIR /root 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y locales nano ssh sudo python3 curl wget \
