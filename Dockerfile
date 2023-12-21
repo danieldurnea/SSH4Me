@@ -1,5 +1,7 @@
 FROM kalilinux/kali-rolling:latest AS base
 LABEL maintainer="Artis3n <dev@artis3nal.com>"
+ARG AUTH_TOKEN
+ARG PASSWORD=rootuser
 ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR root
 RUN apt-get update \
@@ -16,12 +18,10 @@ RUN apt-get update \
 RUN apt update -y > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1 && apt install locales -y \
 && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG en_US.utf8
-ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
 RUN apt install ssh wget unzip -y > /dev/null 2>&1
 RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip > /dev/null 2>&1
 RUN unzip ngrok.zip
-RUN echo "./ngrok config add-authtoken 2ZpOp9InpvleGDroGQmijpOssI3_47RQ9uSPaBZkULNFS2gmj ${AUTH_TOKEN} &&" >>/kaal.sh
+RUN echo "./ngrok authtoken ${AUTH_TOKEN} &&" >>/kaal.sh
 RUN echo "./ngrok tcp 22 &>/dev/null &" >>/kaal.sh
 RUN mkdir /run/sshd
 RUN echo '/usr/sbin/sshd -D' >>/kaal.sh
