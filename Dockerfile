@@ -5,6 +5,10 @@ ARG PASSWORD=rootuser
 ARG DEBIAN_FRONTEND=noninteractive
 WORKDIR root
 RUN apt-get update \
+    && apt-get install -y locales nano ssh sudo python3 curl wget \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
     && apt-get install -y --no-install-recommends apt-utils \
     && apt-get install -y --no-install-recommends amass awscli curl dnsutils \
     dotdotpwn file finger ffuf gobuster git hydra impacket-scripts john less locate \
