@@ -1,5 +1,4 @@
-FROM kalilinux/kali-rolling:latest AS base
-LABEL maintainer="Artis3n <dev@artis3nal.com>"
+FROM kalilinux/kali-rolling
 ENV GO111MODULE=on
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/go
