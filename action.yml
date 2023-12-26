@@ -23,3 +23,6 @@ runs:
 branding:
   icon: 'terminal'
   color: 'gray-dark'
+  push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
