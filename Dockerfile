@@ -1,25 +1,11 @@
 FROM debian:bookworm
-ENV GO111MODULE=on
-ENV GOROOT=/usr/local/go
-ENV GOPATH=/go
-ENV PATH=${HOME}/:${GOPATH}/bin:${GOROOT}/bin:${PATH}
 WORKDIR /root 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y locales nano ssh sudo python3 curl wget \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends apt-utils \
-    && apt-get install -y --no-install-recommends amass awscli curl dnsutils \
-    dotdotpwn file golang finger ffuf gobuster git hydra impacket-scripts john less locate \
-    lsof man-db netcat-traditional nikto nmap proxychains4 python3 python3-pip python3-setuptools \
-    python3-wheel smbclient smbmap socat ssh-client sslscan sqlmap telnet tmux unzip whatweb vim zip \
-    # Slim down layer size
-    && apt-get autoremove -y \
-    && apt-get autoclean -y \
-    # Remove apt-get cache from the layer to reduce container size
-    && rm -rf /var/lib/apt/lists/*
+
 ENV TERM=xterm-256color
 # Install Seclis
 # Prepare rockyou wordlis
