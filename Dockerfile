@@ -1,4 +1,4 @@
-FROM kalilinux/kali-rolling
+FROM debian:bookworm
 ENV GO111MODULE=on
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/go
