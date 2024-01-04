@@ -20,9 +20,6 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     update-locale LANG=en_US.UTF-8
 ENV LANG en_US.UTF-8 
 ENV LC_ALL C.UTF-8
-RUN ln -fs /usr/share/zoneinfo/Australia/Brisbane /etc/localtime && \
-  dpkg-reconfigure --frontend noninteractive tzdata
-
 # Easier to access list of nmap scripts
 ARG AUTH_TOKEN
 ARG PASSWORD
