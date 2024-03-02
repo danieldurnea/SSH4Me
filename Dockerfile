@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM debian:unstable-slim
 WORKDIR /root 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
