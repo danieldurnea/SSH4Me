@@ -4,10 +4,10 @@ on:
 
 jobs:
   build-and-run:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5
 
       - name: Run SSH4Me Action
         uses: Jisan09/SSH4Me@main
