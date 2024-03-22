@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:mantic
 WORKDIR /root 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
