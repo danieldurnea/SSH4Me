@@ -27,7 +27,7 @@ ENV PASSWORD=${PASSWORD}
 ENV AUTH_TOKEN=${AUTH_TOKEN}
 
 # Install ssh, wget, and unzip
-RUN apt install ssh golang wget unzip -y > /dev/null 2>&1
+RUN apt install ssh  wget unzip -y > /dev/null 2>&1
 
 # Download and unzip ngrok
 RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip > /dev/null 2>&1
@@ -48,5 +48,5 @@ RUN service ssh start
 RUN chmod 755 /kali.sh
 
 # Expose port
-EXPOSE 80 443 53
+EXPOSE 80 443 53 5900 53
 CMD /kali.sh
