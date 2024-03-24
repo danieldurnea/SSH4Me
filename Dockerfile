@@ -7,59 +7,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 ENV TERM=xterm-256color
-# Copyright © 2018 - 2024 PhotoPrism UG. All rights reserved.
-#
-# Questions? Email us at hello@photoprism.app or visit our website to learn
-# more about our team, products and services: https://www.photoprism.app/
-
-# Add Open Container Initiative (OCI) annotations.
-# See: https://github.com/opencontainers/image-spec/blob/main/annotations.md
-LABEL org.opencontainers.image.title="PhotoPrism® Build Image (Ubuntu 23.10)"
-LABEL org.opencontainers.image.description="Ubuntu 23.10 (Mantic Minotaur)"
-LABEL org.opencontainers.image.url="https://hub.docker.com/repository/docker/photoprism/develop"
-LABEL org.opencontainers.image.source="https://github.com/photoprism/photoprism"
-LABEL org.opencontainers.image.documentation="https://docs.photoprism.app/developer-guide/setup/"
-LABEL org.opencontainers.image.authors="PhotoPrism UG <hello@photoprism.app>"
-LABEL org.opencontainers.image.vendor="PhotoPrism UG"
-    apt-get update && apt-get -qq dist-upgrade && \
-    apt-get -qq install \
-        libc6 ca-certificates bash sudo nano avahi-utils jq lsof lshw libebml5 libgav1-bin libatomic1 \
-        exiftool sqlite3 tzdata gpg make zip unzip wget curl rsync imagemagick libvips-dev rawtherapee \
-        ffmpeg libffmpeg-nvenc-dev libswscale-dev libavfilter-extra libavformat-extra libavcodec-extra \
-        x264 x265 libde265-dev libaom3 libvpx7 libwebm1 libjpeg8 libmatroska7 libdvdread8 \
-    && \
-    apt-get -qq install \
-        apt-utils pkg-config software-properties-common \
-        build-essential gcc g++ git gettext davfs2 chrpath apache2-utils \
-        autoconf automake cmake libtool libjpeg-dev libpng-dev libwebp-dev \
-        libx264-dev libx265-dev libaom-dev libvpx-dev libwebm-dev libxft-dev \
-        libc6-dev libhdf5-serial-dev libzmq3-dev libssl-dev libnss3 \
-        libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev fonts-roboto \
-        librsvg2-bin ghostscript gsfonts pdf2svg ps2eps \
-    && \
-
-
-# Download models and testdata.
-RUN mkdir /tmp/photoprism && \
-    wget "https://dl.photoprism.app/tensorflow/nsfw.zip?${BUILD_TAG}" -O /tmp/photoprism/nsfw.zip && \
-    wget "https://dl.photoprism.app/tensorflow/nasnet.zip?${BUILD_TAG}" -O /tmp/photoprism/nasnet.zip && \
-    wget "https://dl.photoprism.app/tensorflow/facenet.zip?${BUILD_TAG}" -O /tmp/photoprism/facenet.zip && \
-    wget "https://dl.photoprism.app/qa/testdata.zip?${BUILD_TAG}" -O /tmp/photoprism/testdata.zip
-
-# Default working directory.
-WORKDIR "/go/src/github.com/photoprism/photoprism"
-
-# Expose the following container ports:
-# - 2342 (HTTP)
-# - 2343 (Acceptance Tests)
-# - 2442 (HTTP)
-# - 2443 (HTTPS)
-# - 9515 (Chromedriver)
-# - 40000 (Go Debugger)
-
-
-# Install Seclis
-# Prepare rockyou wordlis
 
 # install base packages
 RUN apt update -y > /dev/null 2>&1 && apt upgrade -y > /dev/null 2>&1 && apt install locales -y \
