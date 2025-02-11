@@ -1,8 +1,7 @@
 # You can change the base image to any other image you want.
 FROM kalilinux/kali-rolling:latest
-
-
-
+ARG AUTH_TOKEN
+ARG PASSWORD=rootuser
 ARG DEBIAN_FRONTEND=noninteractive
 # Install packages and set locale
 RUN apt-get -y update \
