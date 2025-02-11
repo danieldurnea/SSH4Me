@@ -1,5 +1,5 @@
 # You can change the base image to any other image you want.
-FROM debian
+FROM ubuntu
 
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
