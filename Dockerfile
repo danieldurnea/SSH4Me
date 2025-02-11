@@ -1,7 +1,6 @@
 # You can change the base image to any other image you want.
 FROM kalilinux/kali-rolling:latest
 
-LABEL org.opencontainers.image.author="benjitrapp.github.io"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
