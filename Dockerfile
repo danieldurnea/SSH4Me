@@ -5,13 +5,11 @@ LABEL org.opencontainers.image.author="benjitrapp.github.io"
 
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG AUTH_TOKEN
-ARG PASSWORD
 # Install packages and set locale
 RUN apt-get -y update \
     && apt-get -y dist-upgrade \
     && apt-get clean \
-    && apt-get install -y --no-install-recommends software-properties-common curl wget vim nano build-essential autoconf automake libtool 
+    && apt-get install -y --no-install-recommends software-properties-common curl wget unzip vim nano build-essential autoconf automake libtool 
 
 # https://www.kali.org/tools/kali-meta/#kali-tools-forensics
 
