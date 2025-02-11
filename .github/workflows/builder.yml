@@ -1,9 +1,4 @@
-env:
-  TZ: Asia/Kolkata
-  GIT_USERNAME: danieldunea
-  GIT_EMAIL: danieldurnea@gmail.com
-
-task:
+# 
   name: "Kali Linux SSH"
   trigger_type: manual
   timeout_in: 120m
