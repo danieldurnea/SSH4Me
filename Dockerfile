@@ -20,7 +20,6 @@ COPY containerfiles/entrypoint.sh /entrypoint.sh
 COPY containerfiles/bashrc.sh /bashrc.sh
 RUN chmod +x /entrypoint.sh
 
-RUN git clone https://github.com/duo-labs/cloudmapper.git /opt/cloudmapper
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
