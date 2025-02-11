@@ -9,17 +9,12 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update \
     && apt-get -y dist-upgrade \
     && apt-get clean \
-    && apt-get install -y --no-install-recommends software-properties-common curl wget unzip vim nano build-essential autoconf automake libtool 
+    && apt-get install -y --no-install-recommends software-properties-common curl wget unzip vim nano build-essential ssh autoconf automake libtool 
 
 # https://www.kali.org/tools/kali-meta/#kali-tools-forensics
 
 
-COPY containerfiles/entrypoint.sh /entrypoint.sh
-COPY containerfiles/bashrc.sh /bashrc.sh
-RUN chmod +x /entrypoint.sh
 
-
-ENTRYPOINT [ "/entrypoint.sh" ]
 
 # Configure SSH tunnel using ngrok
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -39,4 +34,31 @@ RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux
     && chmod 755 /docker.sh
 
 EXPOSE 80 8888 8080 443 5130-5135 3306 7860
+
+COPY containerfiles/entrypoint.sh /entrypoint.sh
+COPY containerfiles/bashrc.sh /bashrc.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD ["/bin/bash", "/docker.sh"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
