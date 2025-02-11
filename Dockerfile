@@ -1,5 +1,5 @@
 # You can change the base image to any other image you want.
-FROM ubuntu-latest
+FROM debian
 
 
 ARG DEBIAN_FRONTEND=noninteractive
