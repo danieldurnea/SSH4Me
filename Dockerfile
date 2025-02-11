@@ -3,8 +3,10 @@ FROM kalilinux/kali-rolling:latest
 #MAINTAINER Lorenzo "Palinuro" Faletra (palinuro@linux.it)
 ENV DEBIAN_FRONTEND noninteractive
 # Install components
-RUN apt-get update; apt-get -y full-upgrade; apt-get -y dist-upgrade; apt-get -y install parrot-pico; apt-get -y install parrot-mini parrot-tools-cloud; apt-get -y install parrot-interface parrot-interface-full parrot-tools-full; apt -y --allow-downgrades install parrot-interface parrot-interface-full parrot-tools-full; apt-get -y install xrdp; rm -rf /var/lib/apt/lists/*
-# Set locale to en_US.utf8
+RUN apt-get update \
+    && apt-get install -y locales nano ssh sudo python3 curl wget \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*# Set locale to en_US.utf8
 ENV LANG en_US.utf8
 
 # Define arguments and environment variables
