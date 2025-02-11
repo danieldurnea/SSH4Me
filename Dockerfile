@@ -1,5 +1,5 @@
 # You can change the base image to any other image you want.
-FROM kalilinux/kali-rolling
+FROM ubuntu-nooble
 
 
 ARG DEBIAN_FRONTEND=noninteractive
