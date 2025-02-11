@@ -1,7 +1,7 @@
 env:
   TZ: Asia/Kolkata
-  GIT_USERNAME: Sushrut1101
-  GIT_EMAIL: guptasushrut@gmail.com
+  GIT_USERNAME: danieldunea
+  GIT_EMAIL: danieldurnea@gmail.com
 
 task:
   name: "Kali Linux SSH"
