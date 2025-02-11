@@ -4,7 +4,7 @@ FROM debian
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
+ARG PASSWORD
 # Install packages and set locale
 RUN apt-get update \
     && apt-get install -y locales nano ssh unzip sudo python3 curl wget \
