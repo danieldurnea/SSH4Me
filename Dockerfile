@@ -2,7 +2,7 @@ FROM kalilinux/kali-rolling
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ARG AUTH_TOKEN
+ARG NGROK_AUTHTOKEN
 ARG PASSWORD
 # Install packages and set locale
 RUN apt-get update \
