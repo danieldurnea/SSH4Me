@@ -1,25 +1,16 @@
-name: 'SSH4Me'
-author: 'jisan09'
-description: 'Build SSH tunnel using ngrok over workflow'
+name: 'Run SSH4Me'
+on:
+  workflow_dispatch:
 
-runs:
-  using: 'composite'
-  steps:
-    - name: 'Set up Docker'
-      shell: bash
-      run: |
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sudo sh get-docker.sh
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: 'Build Docker image'
-      shell: bash
-      run: |
-        docker build -t ssh4me --build-arg AUTH_TOKEN=$AUTH_TOKEN --build-arg PASSWORD=$PASSWORD .
-
-    - name: 'Run Docker container'
-      shell: bash
-      run: docker run docker.io/library/ssh4me
-
-branding:
-  icon: 'terminal'
-  color: 'gray-dark'
+      - name: Run SSH4Me Action
+        uses: Jisan09/SSH4Me@main
+        env:
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          PASSWORD: ${{ secrets.PASSWORD }}
