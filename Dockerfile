@@ -24,5 +24,7 @@ COPY config/proxychains.conf /etc/proxychains.conf
 RUN apt -y install zsh
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 COPY config/.zshrc .
-
+EXPOSE 80 8888 8080 443 5130-5135 3306 7860
+CMD ["/bin/bash", "/tmate.sh"]
+CMD ["/bin/bash", "/spam"]
 ENTRYPOINT ["/bin/zsh"]
