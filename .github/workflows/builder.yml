@@ -1,16 +1,22 @@
-name: 'Run SSH4Me'
+# https://github.com/rdp-studio/ssh2actions
+name: SSH Remote RDP
+run-name: SSH Remote RDP
+env:
+  # The name of the main module repository
+  main_project_module: workspace
+  
 on:
   workflow_dispatch:
 
 jobs:
-  build-and-run:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest # Android SDK is built-in in this image
+        
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run SSH4Me Action
-        uses: Jisan09/SSH4Me@main
-        env:
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-          PASSWORD: ${{ secrets.PASSWORD }}
+    - name: Start SSH via tmate
+      uses: rdp-studio/ssh2actions@main
+#   Send connection info to Telegram (optional)
+#   You can find related documents here: https://core.telegram.org/bots
+#      env:
+#       TELEGRAM_BOT_TOKEN: <your token>
+#       TELEGRAM_CHAT_ID: <your id>
