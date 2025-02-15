@@ -4,11 +4,11 @@ on:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
       - uses: tmshkr/ngrok-ssh@latest
         with:
-          NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
+          NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
           NGROK_CONFIG_FILE: "ngrok.yml"
       - run: npm start
