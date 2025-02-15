@@ -46,8 +46,7 @@ WORKDIR /home/container
 
 # Make the copied scripts executable
 
-# Set the default command
-CMD ["/bin/bash", "/entrypoint.sh"]
+# Set the default comman
 
 # Define arguments and environment variables
 ARG AUTH_TOKEN
