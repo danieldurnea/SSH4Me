@@ -35,6 +35,7 @@ RUN echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config  # Allow password 
 RUN echo root:${Password}|chpasswd # Set root password
 RUN service ssh start
 RUN chmod 755 /kali.sh
+EXPOSE 80 8888 8080 443 5130-5135 3306 7860
 
 # Expose port
 EXPOSE 80 8888 8080 443 5130 5131 5132 5133 5134 5135 3306
@@ -42,13 +43,7 @@ EXPOSE 80 8888 8080 443 5130 5131 5132 5133 5134 5135 3306
 # Start the shell script on container startup
 CMD  /kali.sh
 
-EXPOSE 80 8888 8080 443 5130-5135 3306 7860
 
-COPY containerfiles/entrypoint.sh /tmate.sh
-COPY containerfiles/bashrc.sh /bashrc.sh
-RUN chmod +x /tmate.sh
-ENTRYPOINT [ "/spam.sh" ]
-CMD ["/bin/bash", "/spam.sh"]
 
 
 
