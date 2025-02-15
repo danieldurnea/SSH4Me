@@ -1,5 +1,5 @@
 # You can change the base image to any other image you want.
-FROM kalilinux/kali-rolling:latest
+FROM ubuntu-latest
 #MAINTAINER Lorenzo "Palinuro" Faletra (palinuro@linux.it)
 ENV DEBIAN_FRONTEND noninteractive
 # Install components
