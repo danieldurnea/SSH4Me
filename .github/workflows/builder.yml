@@ -1,14 +1,14 @@
-name: remote ssh command
-on: [push]
+name: ngrok-ssh
+on:
+  workflow_dispatch:
+
 jobs:
-  build:
-    name: Build
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.2.0
+      - uses: actions/checkout@v4
+      - uses: tmshkr/ngrok-ssh@latest
         with:
-        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-        SSH_PASS: ${{ secrets.SSH_PASS }}
-          port: ${{ secrets.PORT }}
-          script: whoami
+          NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
+          NGROK_CONFIG_FILE: "ngrok.yml"
+      - run: npm start
