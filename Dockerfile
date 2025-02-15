@@ -11,8 +11,6 @@ ENV PROOT_VERSION=5.4.0
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         bash \
-        ssh \
-        unzip \
         curl \
         ca-certificates \
         iproute2 \
