@@ -23,13 +23,8 @@ RUN ARCH=$(uname -m) && \
     curl -Ls "$proot_url" -o /usr/local/bin/proot && \
     chmod 755 /usr/local/bin/proot
 
-# Create a non-root user
-RUN useradd -m -d /home/container -s /bin/bash container
 
 # Switch to the new user
-USER container
-ENV USER=container
-ENV HOME=/home/container
 
 # Set the working directory
 WORKDIR /home/container
