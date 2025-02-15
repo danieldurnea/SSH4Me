@@ -45,14 +45,8 @@ ENV HOME=/home/container
 # Set the working directory
 WORKDIR /home/container
 
-# Copy scripts into the container
-COPY --chown=container:container ./entrypoint.sh /entrypoint.sh
-COPY --chown=container:container ./install.sh /install.sh
-COPY --chown=container:container ./helper.sh /helper.sh
-COPY --chown=container:container ./run.sh /run.sh
 
 # Make the copied scripts executable
-RUN chmod +x /spam.sh /install.sh /tmate.sh /run.sh
 
 # Set the default command
 CMD ["/bin/bash", "/entrypoint.sh"]
