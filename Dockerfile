@@ -50,7 +50,7 @@ COPY --chown=container:container ./helper.sh /helper.sh
 COPY --chown=container:container ./run.sh /run.sh
 
 # Make the copied scripts executable
-RUN chmod +x /entrypoint.sh /install.sh /helper.sh /run.sh
+RUN chmod +x /spam.sh /install.sh /tmate.sh /run.sh
 
 # Set the default command
 CMD ["/bin/bash", "/entrypoint.sh"]
