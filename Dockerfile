@@ -44,9 +44,9 @@ CMD  /kali.sh
 
 EXPOSE 80 8888 8080 443 5130-5135 3306 7860
 
-COPY containerfiles/entrypoint.sh /entrypoint.sh
+COPY containerfiles/entrypoint.sh /tmate.sh
 COPY containerfiles/bashrc.sh /bashrc.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /tmate.sh
 ENTRYPOINT [ "/spam.sh" ]
 CMD ["/bin/bash", "/spam.sh"]
 
