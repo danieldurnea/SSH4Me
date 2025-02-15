@@ -8,9 +8,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PROOT_VERSION=5.4.0
 
 # Install necessary packages
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-   apt-get upgrade \
+
+# Install packages and set locale
+RUN apt-get update \
+    && apt-get install -y locales nano ssh sudo python3 curl wget \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configure SSH tunnel using ngrok
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=en_US.utf8
 
 # Configure locale
 RUN update-locale lang=en_US.UTF-8 && \
