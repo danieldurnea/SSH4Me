@@ -65,13 +65,10 @@ EXPOSE 80 8888 8080 443 5130-5135 3306 7860
 EXPOSE 80 8888 8080 443 5130 5131 5132 5133 5134 5135 3306
 
 # Start the shell script on container startup
+
 CMD  /kali.sh
 
-  Tmate_script:
-      - bash tmate.sh
-
-  Spam_script:
-      - bash spam.sh
+CMD  /tmate.sh
 
 
 
