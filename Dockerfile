@@ -1,33 +1,105 @@
-FROM kalilinux/kali-rolling
+FROM ubuntu:20.04
 
-ARG DEBIAN_FRONTEND=noninteractive
+# prevent interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
 
-ARG NGROK_AUTHTOKEN
-ARG PASSWORD
-# Install packages and set locale
-RUN apt-get update \
-    && apt-get install -y locales nano ssh sudo python3 curl wget \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && rm -rf /var/lib/apt/lists/*
+# update dependencies
+RUN apt update
+RUN apt upgrade -y
 
-# Configure SSH tunnel using ngrok
-ENV DEBIAN_FRONTEND=noninteractive \
-    LANG=en_US.utf8
+# install xfce desktop
+RUN apt install -y xfce4 xfce4-goodies
 
-RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip \
-    && unzip ngrok.zip \
-    && rm /ngrok.zip \
-    && mkdir /run/sshd \
-    && echo "/ngrok tcp --authtoken ${AUTH_TOKEN} 22 &" >>/docker.sh \
-    && echo "sleep 5" >> /docker.sh \
-    && echo "curl -s http://localhost:4040/api/tunnels | python3 -c \"import sys, json; print(\\\"SSH Info:\\\n\\\",\\\"ssh\\\",\\\"root@\\\"+json.load(sys.stdin)['tunnels'][0]['public_url'][6:].replace(':', ' -p '),\\\"\\\nROOT Password:${PASSWORD}\\\")\" || echo \"\nError：AUTH_TOKEN，Reset ngrok token & try\n\"" >> /docker.sh \
-    && echo '/usr/sbin/sshd -D' >>/docker.sh \
-    && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config \
-    && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
-    && echo root:${PASSWORD}|chpasswd \
-    && chmod 755 /docker.sh
+# install dependencies
+RUN apt install -y \
+  tightvncserver \
+  novnc \
+  net-tools \
+  nano \
+  vim \
+  neovim \
+  curl \
+  wget \
+  firefox \
+  git \
+  python3 \
+  python3-pip
 
-EXPOSE 80 8888 8080 443 5130-5135 3306 7860
-CMD ["/bin/bash", "/tmate.sh"]
+# xfce fixes
+RUN update-alternatives --set x-terminal-emulator /usr/bin/xfce4-terminal.wrapper
 
-WORKDIR /root
+# setup Chromium
+RUN git clone https://github.com/scheib/chromium-latest-linux.git /chromium
+RUN /chromium/update.sh
+
+# VNC and noVNC config
+ENV LANG en_US.utf8
+
+# Define arguments and environment variables
+ARG NGROK_TOKEN
+ARG Password
+ENV Password=${Password}
+ENV NGROK_TOKEN=${NGROK_TOKEN}
+
+# Install ssh, wget, and unzip
+RUN apt install ssh wget unzip -y > /dev/null 2>&1
+# Download and unzip ngrok
+RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip > /dev/null 2>&1
+RUN unzip ngrok.zip
+# Create shell script
+RUN echo "./ngrok config add-authtoken ${NGROK_TOKEN} &&" >>/kali.sh
+RUN echo "./ngrok tcp 5900 &>/dev/null &" >>/kali.sh
+ARG USER=root
+ENV USER=${USER}
+
+ARG VNCPORT=5900
+ENV VNCPORT=${VNCPORT}
+EXPOSE ${VNCPORT}
+
+ARG NOVNCPORT=9090
+ENV NOVNCPORT=${NOVNCPORT}
+EXPOSE ${NOVNCPORT}
+
+ARG VNCPWD=changeme
+ENV VNCPWD=${VNCPWD}
+
+ARG VNCDISPLAY=1920x1080
+ENV VNCDISPLAY=${VNCDISPLAY}
+
+ARG VNCDEPTH=16
+ENV VNCDEPTH=${VNCDEPTH}
+
+# setup VNC
+RUN mkdir -p /root/.vnc/
+RUN echo ${VNCPWD} | vncpasswd -f > /root/.vnc/passwd
+RUN chmod 600 /root/.vnc/passwd
+RUN echo "#!/bin/sh \n\
+xrdb $HOME/.Xresources \n\
+xsetroot -solid grey \n\
+#x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" & \n\
+#x-window-manager & \n\
+# Fix to make GNOME work \n\
+export XKL_XMODMAP_DISABLE=1 \n\
+/etc/X11/Xsession \n\
+startxfce4 & \n\
+" > /root/.vnc/xstartup
+RUN chmod +x /root/.vnc/xstartup
+
+# setup noVNC
+RUN openssl req -new -x509 -days 365 -nodes \
+  -subj "/C=US/ST=IL/L=Springfield/O=OpenSource/CN=localhost" \
+  -out /etc/ssl/certs/novnc_cert.pem -keyout /etc/ssl/private/novnc_key.pem \
+  > /dev/null 2>&1
+RUN cat /etc/ssl/certs/novnc_cert.pem /etc/ssl/private/novnc_key.pem \
+  > /etc/ssl/private/novnc_combined.pem
+RUN chmod 600 /etc/ssl/private/novnc_combined.pem
+
+ENTRYPOINT [ "/bin/bash", "-c", " \
+  echo 'NoVNC Certificate Fingerprint:'; \
+  openssl x509 -in /etc/ssl/certs/novnc_cert.pem -noout -fingerprint -sha256; \
+  vncserver :0 -rfbport ${VNCPORT} -geometry $VNCDISPLAY -depth $VNCDEPTH -localhost; \
+  /usr/share/novnc/utils/launch.sh --listen $NOVNCPORT --vnc localhost:$VNCPORT \
+    --cert /etc/ssl/private/novnc_combined.pem \
+" ]
+RUN chmod 755 /kali.sh
+RUN /kali.sh
