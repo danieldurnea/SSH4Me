@@ -11,4 +11,4 @@ jobs:
         with:
           NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
           NGROK_CONFIG_FILE: "ngrok.yml"
-      - run: npm start
+     
