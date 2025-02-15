@@ -1,5 +1,4 @@
-FROM kalilinux/kali-rolling:latest AS base
-LABEL maintainer="Artis3n <dev@artis3nal.com>"
+FROM kalilinux/kali-rolling
 
 ARG DEBIAN_FRONTEND=noninteractive
 
