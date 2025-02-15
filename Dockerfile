@@ -1,5 +1,5 @@
 # Kali Linux latest with useful tools by tsumarios
-FROM kalilinux/kali-rolling
+FROM ubuntu
 
 # Set working directory to /root
 WORKDIR /root
