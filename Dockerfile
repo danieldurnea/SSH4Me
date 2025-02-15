@@ -10,16 +10,7 @@ ENV PROOT_VERSION=5.4.0
 # Install necessary packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        bash \
-        curl \
-        ca-certificates \
-        iproute2 \
-        xz-utils \
-        bzip2 \
-        sudo \
-        locales \
-        adduser && \
-    rm -rf /var/lib/apt/lists/*
+   apt-get upgrade \
 
 # Configure locale
 RUN update-locale lang=en_US.UTF-8 && \
