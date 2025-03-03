@@ -7,10 +7,6 @@ ARG PASSWORD
 # Install Python common dependencies
 RUN python3 -m pip install --upgrade setuptools wheel paramiko
 
-# Install ZSH
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended \
-  chsh -s $(which zsh)
-
 # ------------------------------
 # --- Config ---
 # ------------------------------
