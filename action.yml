@@ -10,7 +10,10 @@ runs:
       run: |
         curl -fsSL https://get.docker.com -o get-docker.sh
         sudo sh get-docker.sh
-
+    - name: 'huntkit'
+      shel: bash 
+       run: |
+       docker run -it mcnamee/huntkit . 
     - name: 'Build Docker image'
       shell: bash
       run: |
