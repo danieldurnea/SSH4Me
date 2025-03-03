@@ -14,7 +14,4 @@ jobs:
         env:
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          push: true
-          cache-from: type=registry,ref=${{ env.ECR_FULL_REPO }}:dockercache
-          cache-to: type=registry,ref=${{ env.ECR_FULL_REPO }}:dockercache,mode=max,image-manifest=true
-          sleep: 6h
+         
