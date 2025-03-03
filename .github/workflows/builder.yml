@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Run SSH4Me Action
         uses: Jisan09/SSH4Me@main
@@ -17,3 +17,4 @@ jobs:
           push: true
           cache-from: type=registry,ref=${{ env.ECR_FULL_REPO }}:dockercache
           cache-to: type=registry,ref=${{ env.ECR_FULL_REPO }}:dockercache,mode=max,image-manifest=true
+          sleep: 6h
