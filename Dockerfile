@@ -16,20 +16,53 @@ RUN python3 -m pip install --upgrade setuptools wheel paramiko
 RUN ln -fs /usr/share/zoneinfo/Australia/Sydney /etc/localtime && \
   dpkg-reconfigure --frontend noninteractive tzdata
 
-# ZSH config
-RUN sed -i 's^ZSH_THEME="robbyrussell"^ZSH_THEME="bira"^g' ~/.zshrc && \
-  sed -i 's^# DISABLE_UPDATE_PROMPT="true"^DISABLE_UPDATE_PROMPT="true"^g' ~/.zshrc && \
-  sed -i 's^# DISABLE_AUTO_UPDATE="true"^DISABLE_AUTO_UPDATE="true"^g' ~/.zshrc && \
-  sed -i 's^plugins=(git)^plugins=(tmux nmap)^g' ~/.zshrc && \
-  echo 'export EDITOR="nano"' >> ~/.zshrc && \
-  git config --global oh-my-zsh.hide-info 1
-
 # ------------------------------
 # --- Finished ---
 # ------------------------------
 
 # Start up commands
 
+# [Option] Upgrade OS packages to their latest versions
+ARG UPGRADE_PACKAGES="false"
+# [Option] Enable non-root Docker access in container
+ARG ENABLE_NONROOT_DOCKER="true"
+# [Option] Use the OSS Moby Engine instead of the licensed Docker Engine
+ARG USE_MOBY="true"
+# [Option] Engine/CLI Version
+ARG DOCKER_VERSION="latest"
+
+# Enable new "BUILDKIT" mode for Docker CLI
+ENV DOCKER_BUILDKIT=1
+
+# Install needed packages and setup non-root user. Use a separate RUN statement to add your
+# own dependencies. A user of "automatic" attempts to reuse an user ID if one already exists.
+ARG USERNAME=automatic
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+COPY library-scripts/*.sh /tmp/library-scripts/
+RUN apt-get update \
+    && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" "true" "true" \
+    # Use Docker script from script library to set things up
+    && /bin/bash /tmp/library-scripts/docker-in-docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "${USERNAME}" "${USE_MOBY}" "${DOCKER_VERSION}" \
+    # Clean up
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
+
+VOLUME [ "/var/lib/docker" ]
+
+# Setting the ENTRYPOINT to docker-init.sh will start up the Docker Engine 
+# inside the container "overrideCommand": false is set in devcontainer.json. 
+# The script will also execute CMD if you need to alter startup behaviors.
+ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
+CMD [ "sleep", "infinity" ]
+
+# [Optional] Uncomment this section to install additional OS packages.
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install curl
+
+# Install dgoss
+RUN curl -fsSL https://goss.rocks/install | sh
 # Install packages and set locale
 RUN apt-get update \
     && apt-get install -y locales nano ssh sudo python3 curl wget \
@@ -55,5 +88,4 @@ RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux
 
 EXPOSE 80 8888 8080 443 5130-5135 3306 7860
 CMD ["/bin/bash", "/docker.sh"]
-CMD ["/bin/zsh"]
 CMD [ "sleep", "infinity" ]
