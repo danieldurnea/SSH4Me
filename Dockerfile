@@ -3,7 +3,8 @@ FROM catub/core:bullseye
 
 ARG AUTH_TOKEN
 ARG PASSWORD
-
+# Install dgoss
+RUN curl -fsSL https://goss.rocks/install | sh
 # Install Python common dependencies
 RUN python3 -m pip install --upgrade setuptools wheel paramiko
 
