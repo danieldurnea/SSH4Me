@@ -44,8 +44,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # --- Finished ---
 
 # Start up commands
-echo "export PATH=${PATH}" >> ~/.zshrc
-chsh -s $(which zsh)
 RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip \
     && unzip ngrok.zip \
     && rm /ngrok.zip \
