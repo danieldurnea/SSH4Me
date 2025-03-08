@@ -1,5 +1,5 @@
 # catub/core:bullseye  You can change the base image to any other image you want.
-FROM catub/core:bullseye
+FROM ubuntu-20.04
 ARG AUTH_TOKEN
 ARG PASSWORD
 # Install dgoss
