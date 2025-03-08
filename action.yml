@@ -1,75 +1,7 @@
-name: 'SSH4Me'
-author: 'jisan09'
-description: 'Build SSH tunnel using ngrok over workflow'
-
+name: 'Speedup package installation'
+description: 'Tune your runtime on ubuntu-latest'
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
-    - name: 'Set up Docker'
+    - run: ${{ github.action_path }}/speedup.sh
       shell: bash
-      run: |
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        sudo sh get-docker.sh
-    - name: 'Build Docker image'
-      shell: bash
-      run: |
-        docker build -t ssh4me --build-arg AUTH_TOKEN=$AUTH_TOKEN --build-arg PASSWORD=$PASSWORD .
-      
-    - name: 'Run Docker container'
-      shell: bash
-      run: docker run docker.io/library/ssh4me
-       push: true
-          cache-from: type=registry,ref=${{ env.ECR_FULL_REPO }}:dockercache
-          cache-to: type=registry,ref=${{ env.ECR_FULL_REPO }}:dockercache,mode=max,image-manifest=true
-branding:
-  icon: 'terminal'
-  color: 'gray-dark'
-
-version: '3.8'
-services:
-
-  kali:
-    build:
-      dockerfile: Dockerfile
-      context: ./kali
-    #image: 'kalilinux/kali-rolling'
-    container_name: kali
-    tty: true
-    restart: always
-    privileged: true   # Add the privileged option, SYS_ADMIN is limited, where privileged has full access
-    network_mode: host
-    stdin_open: true
-    ports:
-    - 127.0.0.1:8085:8085
-
-  ubuntu:
-    build:
-      dockerfile: Dockerfile
-      context: ./ubuntu
-    #image: 'ubuntu:jammy'
-    container_name: ubuntu
-    privileged: true
-    network_mode: host
-    tty: true
-    restart: always
-    stdin_open: true
-    ports:
-    - 127.0.0.1:8086:8086
-
-  kali_systemd_2:
-    build:
-      dockerfile: Dockerfile_systemd
-      context: ./kali
-    #image: 'kalilinux/kali-rolling'
-    # systemd image prebuilt
-    #image: 'lostcauze7/kali-dockerized:latest'
-    container_name: kali_systemd_2
-    network_mode: host
-    tty: true
-    restart: always
-    stdin_open: true
-    privileged: true   # Add the privileged option, SYS_ADMIN is limited, where privileged has full access
-    working_dir: /usr  # Add the working directory option
-    ports:
-      - 127.0.0.1:8087:8087
-    command: "/bin/bash"
