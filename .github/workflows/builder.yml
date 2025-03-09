@@ -1,7 +1,7 @@
 name: 'Run SSH4Me'
 on:
   workflow_dispatch:
- run: bash linux-ssh.sh
+ run: bash sppedup.sh
     
      # if: ${{ failure() }}
       run: sleep 6h
