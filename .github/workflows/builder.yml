@@ -1,4 +1,3 @@
-## aa 
 name: 'Run SSH4Me'
 on:
   workflow_dispatch:
@@ -8,13 +7,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Run SSH4Me Action
         uses: Jisan09/SSH4Me@main
         env:
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
           PASSWORD: ${{ secrets.PASSWORD }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-        
