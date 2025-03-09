@@ -28,7 +28,6 @@ RUN ln -fs /usr/share/zoneinfo/Australia/Sydney /etc/localtime && \
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install curl
 
-RUN chmod +x speedup.sh
 # Start up commands
 # Install dgoss
 RUN curl -fsSL https://goss.rocks/install | sh
