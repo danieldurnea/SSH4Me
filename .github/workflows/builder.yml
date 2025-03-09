@@ -17,6 +17,4 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-           - uses: actions/checkout@v2
-    - name: Apply settings
-      run: bash ./speedup.sh
+        
