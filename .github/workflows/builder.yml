@@ -1,10 +1,6 @@
 name: 'Run SSH4Me'
 on:
   workflow_dispatch:
- run: bash sppedup.sh
-    
-     # if: ${{ failure() }}
-      run: sleep 6h
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
