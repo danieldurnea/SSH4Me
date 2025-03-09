@@ -1,5 +1,5 @@
 # catub/core:bullseye  You can change the base image to any other image you want.
-FROM debian:bookworm-20230411
+FROM catub/core:bullseye
 ARG AUTH_TOKEN
 ARG PASSWORD
 # Install dgoss
