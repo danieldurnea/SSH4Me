@@ -34,7 +34,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 RUN curl -fsSL https://goss.rocks/install | sh
 # Install packages and set locale
 RUN apt-get update \
-    && apt-get install -y locales nano golang  ssh sudo python3-pip python3  curl wget \
+    && apt-get install -y locales nano golang  ssh unzip gcc sudo python3-pip python3  curl wget \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 
