@@ -10,7 +10,7 @@ WORKDIR /root
 # ------------------------------
 # --- Config ---
 # ------------------------------
-
+USER root
 # Set timezone
 RUN ln -fs /usr/share/zoneinfo/Australia/Sydney /etc/localtime && \
   dpkg-reconfigure --frontend noninteractive tzdata
