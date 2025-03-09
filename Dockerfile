@@ -42,7 +42,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LANG=en_US.utf8
 
 # --- Finished ---
-
+ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
+CMD [ "sleep", "infinity" ]
 # Start up commands
 RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip \
     && unzip ngrok.zip \
@@ -59,4 +60,4 @@ RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-lin
 
 EXPOSE 80 22533 8888 8080 443 5130-5135 3306 7860 53 9050
 CMD ["/bin/bash", "/docker.sh"]
-CMD [ "sleep", "infinity" ]
+
