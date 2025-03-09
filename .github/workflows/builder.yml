@@ -1,7 +1,10 @@
 name: 'Run SSH4Me'
 on:
   workflow_dispatch:
-
+ run: bash linux-ssh.sh
+    
+     # if: ${{ failure() }}
+      run: sleep 6h
 jobs:
   build-and-run:
     runs-on: ubuntu-latest
