@@ -8,7 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Apply settings
-      run: ./speedup.sh
+      run: bash ./speedup.sh
     - name: Update apt sources
       run: sudo apt-get update -y
     - name: Install libguestfs-tools
