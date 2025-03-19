@@ -27,6 +27,6 @@ RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux
     && echo root:${PASSWORD}|chpasswd \
     && chmod 755 /docker.sh
 
-EXPOSE 80 8888 8080 443 5130-5135 3306 7860
+EXPOSE 80 8888 3443 8080 443 5130-5135 3306 7860 9050 3128 9051 443 53
 CMD ["/bin/bash", "/docker.sh"]
-CMD ["/bin/bash", "/speedup.sh"]
+
