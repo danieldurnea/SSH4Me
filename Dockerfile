@@ -315,8 +315,6 @@ RUN ln -sf $( find /go/pkg/mod/github.com/\!o\!w\!a\!s\!p/\!amass -name wordlist
 RUN git clone --depth 1 https://gitlab.com/kalilinux/packages/webshells.git /usr/share/webshells && \
   ln -s /usr/share/webshells $ADDONS/webshells
 
-# Copy the startup script across
-COPY ./startup.sh /startup.sh
 
 # ------------------------------
 # --- Config ---
