@@ -1,4 +1,4 @@
-`````````````````````````````````````````````````````name: 'Run SSH4Me'
+name: 'Run SSH4Me'
 on:
   workflow_dispatch:
 
