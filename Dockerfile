@@ -13,30 +13,7 @@ RUN echo "deb-src http://http.kali.org/kali kali-rolling main contrib non-free" 
 # Environment Variables
 
 # Proxychains config
-RUN echo "dynamic_chain" > /etc/proxychains.conf && \
-  echo "proxy_dns" >> /etc/proxychains.conf && \
-  echo "tcp_read_time_out 15000" >> /etc/proxychains.conf && \
-  echo "tcp_connect_time_out 8000" >> /etc/proxychains.conf && \
-  echo "[ProxyList]" >> /etc/proxychains.conf && \
-  echo "socks5 127.0.0.1 9050" >> /etc/proxychains.conf
 
-# Common commands (aliases)
-RUN echo "alias myip='dig +short myip.opendns.com @resolver1.opendns.com'" >> ~/.zshrc
-
-# ZSH config
-RUN sed -i 's^ZSH_THEME="robbyrussell"^ZSH_THEME="bira"^g' ~/.zshrc && \
-  sed -i 's^# DISABLE_UPDATE_PROMPT="true"^DISABLE_UPDATE_PROMPT="true"^g' ~/.zshrc && \
-  sed -i 's^# DISABLE_AUTO_UPDATE="true"^DISABLE_AUTO_UPDATE="true"^g' ~/.zshrc && \
-  sed -i 's^plugins=(git)^plugins=(tmux nmap)^g' ~/.zshrc && \
-  echo 'export EDITOR="nano"' >> ~/.zshrc && \
-  git config --global oh-my-zsh.hide-info 1
-
-# Clean up space - remove version control
-RUN cd $HOME && find . -name '.git' -type d -exec rm -rf {} + && \
-  cd $TOOLS && find . -name '.git' -type d -exec rm -rf {} + && \
-  cd $ADDONS && find . -name '.git' -type d -exec rm -rf {} + && \
-  cd $WORDLISTS && find . -name '.git' -type d -exec rm -rf {} + && \
-  rm -rf /root/.cache
 
 # Install packages and set locale
 RUN apt-get update \
