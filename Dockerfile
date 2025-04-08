@@ -1,5 +1,6 @@
 # You can change the base image to any other image you want.
-FROM catub/core:bullseye
+FROM debian:bookworm-slim as builder
+
 
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
