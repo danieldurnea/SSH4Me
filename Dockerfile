@@ -2,6 +2,8 @@ FROM parrotsec/core:latest
 
 MAINTAINER Vishnu Nair
 
+ARG AUTH_TOKEN
+ARG PASSWORD=rootuser
 RUN apt-get update && apt-get -qq -y install wget python3 python3-pip python3-dev
 
 RUN echo > /etc/apt/sources.list;\
@@ -10,17 +12,6 @@ RUN echo > /etc/apt/sources.list;\
     wget -qO - https://archive.parrotsec.org/parrot/misc/parrotsec.gpg | apt-key add -;\
     apt-get update;\
     apt-get -y --no-install-recommends install -y traceroute dirb nikto dnsmap websploit libwww-perl uniscan wfuzz wapiti whois dnsutils dnsrecon metagoofil theharvester nmap wafw00f wpscan sslscan sslyze whatweb joomscan git apt-transport-https dirmngr gnupg apt-utils ca-certificates curl build-essential python3-pkg-resources python3-setuptools python3-pip python3-setuptools openssl;echo "resolvconf resolvconf/linkify-resolvconf boolean false" | debconf-set-selections;
-
-RUN mkdir -p /src
-
-WORKDIR /src
-
-RUN pip3 install argparse netaddr mechanize;\
-    git clone https://github.com/hahwul/a2sv.git;\
-    git clone https://github.com/faizann24/XssPy.git;\
-    git clone https://github.com/s0md3v/XSStrike.git && pip3 install -r /src/XSStrike/requirements.txt;\
-    pip3 install setuptools droopescan
-
 # Configure SSH tunnel using ngrok
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=en_US.utf8
