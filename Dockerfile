@@ -1,5 +1,5 @@
 # You can change the base image to any other image you want.
-FROM vxcontrol/kali-linux
+FROM kalilinux/kali-linux-docker
 
 
 # Install packages and set locale
