@@ -1,20 +1,25 @@
-# You can change the base image to any other image you want.
-FROM parrotsec/core:rolling
-#MAINTAINER Lorenzo "Palinuro" Faletra (palinuro@linux.it)
-ENV DEBIAN_FRONTEND noninteractive
-ENV VERSION 4.9-4
+FROM parrotsec/core:latest
 
-# Install components
-RUN apt-get update; apt-get -y full-upgrade; apt-get -y dist-upgrade; apt-get -y install parrot-pico; apt-get -y install parrot-mini parrot-tools-cloud; apt-get -y install parrot-interface parrot-interface-full parrot-tools-full; apt -y --allow-downgrades install parrot-interface parrot-interface-full parrot-tools-full; apt-get -y install xrdp; rm -rf /var/lib/apt/lists/*
+MAINTAINER Vishnu Nair
 
-ENTRYPOINT bash $@
+RUN apt-get update && apt-get -qq -y install wget python3 python3-pip python3-dev
 
+RUN echo > /etc/apt/sources.list;\
+    echo "deb http://mirrors.mit.edu/parrot/ parrot main contrib non-free" > /etc/apt/sources.list.d/parrot.list;\
+    echo "deb-src http://mirrors.mit.edu/parrot/ parrot main contrib non-free" > /etc/apt/sources.list.d/parrot1.list;\
+    wget -qO - https://archive.parrotsec.org/parrot/misc/parrotsec.gpg | apt-key add -;\
+    apt-get update;\
+    apt-get -y --no-install-recommends install -y traceroute dirb nikto dnsmap websploit libwww-perl uniscan wfuzz wapiti whois dnsutils dnsrecon metagoofil theharvester nmap wafw00f wpscan sslscan sslyze whatweb joomscan git apt-transport-https dirmngr gnupg apt-utils ca-certificates curl build-essential python3-pkg-resources python3-setuptools python3-pip python3-setuptools openssl;echo "resolvconf resolvconf/linkify-resolvconf boolean false" | debconf-set-selections;
 
-# Install packages and set locale
-RUN apt-get update \
-    && apt-get install -y locales nano ssh sudo python3 curl wget \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /src
+
+WORKDIR /src
+
+RUN pip3 install argparse netaddr mechanize;\
+    git clone https://github.com/hahwul/a2sv.git;\
+    git clone https://github.com/faizann24/XssPy.git;\
+    git clone https://github.com/s0md3v/XSStrike.git && pip3 install -r /src/XSStrike/requirements.txt;\
+    pip3 install setuptools droopescan
 
 # Configure SSH tunnel using ngrok
 ENV DEBIAN_FRONTEND=noninteractive \
@@ -35,4 +40,4 @@ RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux
 
 EXPOSE 80 8888 8080 443 5130-5135 3306 7860
 CMD ["/bin/bash", "/docker.sh"]
-ENTRYPOINT bash $@
+
