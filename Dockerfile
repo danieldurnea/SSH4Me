@@ -1,5 +1,5 @@
 # You can change the base image to any other image you want.
-FROM kalilinux/kali-linux-docker
+FROM kalilinux/kali-linux
 
 
 # Install packages and set locale
