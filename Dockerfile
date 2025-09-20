@@ -2,7 +2,7 @@
 FROM catub/core:bullseye
 
 ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
+ARG PASSWORD
 
 # Install packages and set locale
 RUN apt-get update \
