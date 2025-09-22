@@ -1,5 +1,6 @@
 # You can change the base image to any other image you want.
-FROM ubuntu
+FROM catub/core:bullseye
+
 
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
