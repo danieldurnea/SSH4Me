@@ -1,82 +1,40 @@
-FROM kalilinux/kali-rolling:latest
+FROM ubuntu:22.04
 
-ARG KALI_METAPACKAGE=core
-ARG KALI_DESKTOP=xfce
-ARG BASE_PACKAGES="vim less iputils-ping net-tools"  # Core set of tools
-ENV DEBIAN_FRONTEND noninteractive
-ENV USER root
-ENV VNCEXPOSE 1
-ENV VNCWEB 0
-ENV VNCPORT 5900
-ENV VNCDISPLAY 1920x1080
-ENV VNCDEPTH 16
-ENV NOVNCPORT 8080
+# Hardcoded credentials
+ENV USER=morningstar
+ENV PASSWORD=morningstar123
 
-# Base packages
-RUN apt-get update && \
-    apt-get -y upgrade && \
-    apt-get -y install --no-install-recommends \
-    kali-linux-${KALI_METAPACKAGE} \
-    kali-tools-top10 \
-    kali-desktop-${KALI_DESKTOP} \
-    tightvncserver xfonts-base autocutsel \
-    dbus dbus-x11 \
-    novnc \
-    ${BASE_PACKAGES} && \
+# Install SSH and sudo, clean up after
+RUN apt-get update -yq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+    openssh-server \
+    openssh-client \
+    curl \
+    sudo && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Common tools
-RUN apt-get update && \
-    apt-get -y install --no-install-recommends \
-    burpsuite \
-    wordlists && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Prepare SSH configuration
+RUN mkdir -p /run/sshd && \
+    # Remove any existing PasswordAuthentication lines
+    sed -i '/PasswordAuthentication/d' /etc/ssh/sshd_config && \
+    echo "PermitRootLogin no" >> /etc/ssh/sshd_config && \
+    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
+    echo "ClientAliveInterval 60" >> /etc/ssh/sshd_config
 
-# Extra packages for specific challenges
-ARG EXTRA_PACKAGES=""
-RUN apt-get update && \
-    apt-get -y install --no-install-recommends \
-    ${EXTRA_PACKAGES} && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Create user with password and give sudo access
+RUN useradd -m -s /bin/bash $USER && \
+    echo "$USER:$PASSWORD" | chpasswd && \
+    usermod -aG sudo $USER && \
+    chown -R $USER:$USER /home/$USER && \
+    echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Copy autoconnect/start script (if you have one)
+COPY start.sh /start.sh
+RUN chmod +x /start.sh && chown $USER:$USER /start.sh
 
+# Expose SSH port
+EXPOSE 22
 
-# Extra packages for specific challenges
-ARG EXTRA_PACKAGES=""
-RUN apt-get update && \
-    apt-get -y install --no-install-recommends \
-    ${EXTRA_PACKAGES} && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-
-
-
-
-
-# Configure SSH tunnel using ngrok
-ENV DEBIAN_FRONTEND=noninteractive \
-    LANG=en_US.utf8
-
-RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip \
-    && unzip ngrok.zip \
-    && rm /ngrok.zip \
-    && mkdir /run/sshd \
-    && echo "/ngrok tcp --authtoken ${AUTH_TOKEN} 22 &" >>/docker.sh \
-    && echo "sleep 5" >> /docker.sh \
-    && echo "curl -s http://localhost:4040/api/tunnels | python3 -c \"import sys, json; print(\\\"SSH Info:\\\n\\\",\\\"ssh\\\",\\\"root@\\\"+json.load(sys.stdin)['tunnels'][0]['public_url'][6:].replace(':', ' -p '),\\\"\\\nROOT Password:${PASSWORD}\\\")\" || echo \"\nError：AUTH_TOKEN，Reset ngrok token & try\n\"" >> /docker.sh \
-    && echo '/usr/sbin/sshd -D' >>/docker.sh \
-    && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config \
-    && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
-    && echo root:${PASSWORD}|chpasswd \
-    && chmod 755 /docker.sh
-
-EXPOSE 80 8888 8080 443 5130-5135 3306 7860
-CMD ["/bin/bash", "/docker.sh"]
-ENTRYPOINT [ "/entrypoint.sh" ]
+# Start SSH daemon
+CMD ["/start.sh"]
