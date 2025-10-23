@@ -15,7 +15,7 @@ RUN apt-get install -y kali-desktop-xfce ssh wget curl xrdp dbus-x11 && apt-get 
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=en_US.utf8
 
-RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip \
+RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip \
     && unzip ngrok.zip \
     && rm /ngrok.zip \
     && mkdir /run/sshd \
