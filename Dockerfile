@@ -5,10 +5,6 @@ FROM amitie10g/kali-$KALI_VER:upstream AS base-build
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ARG DEBIAN_FRONTEND=noninteractive
-COPY init/ /etc/my_init.d/
-COPY kalitorify /tmp/kalitorify
-COPY excludes /etc/dpkg/dpkg.cfg.d/
 
 # Base system plus nano, lynx, tor and kalitorify
 RUN adduser --quiet --add_extra_groups --disabled-password --gecos \"\" kali && \
