@@ -1,4 +1,8 @@
-FROM ubuntu:22.04
+# kali or kali-bleeding-edge
+ARG KALI_VER=rolling
+FROM amitie10g/kali-$KALI_VER:upstream AS base-build
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 # Hardcoded credentials
 ENV USER=morningstar
