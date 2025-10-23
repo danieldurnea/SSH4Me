@@ -1,44 +1,31 @@
-# kali or kali-bleeding-edge
-ARG KALI_VER=rolling
-FROM amitie10g/kali-$KALI_VER:upstream AS base-build
+# You can change the base image to any other image you want.
+FROM catub/core:bullseye
 
-ARG DEBIAN_FRONTEND=noninteractive
+ARG AUTH_TOKEN
+ARG PASSWORD=rootuser
 
-# Hardcoded credentials
-ENV USER=morningstar
-ENV PASSWORD=morningstar123
+# Install packages and set locale
+RUN apt-get update \
+    && apt-get install -y locales nano ssh sudo python3 curl wget \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install SSH and sudo, clean up after
-RUN apt-get update -yq && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    openssh-server \
-    openssh-client \
-    curl \
-    sudo && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Configure SSH tunnel using ngrok
+ENV DEBIAN_FRONTEND=noninteractive \
+    LANG=en_US.utf8
 
-# Prepare SSH configuration
-RUN mkdir -p /run/sshd && \
-    # Remove any existing PasswordAuthentication lines
-    sed -i '/PasswordAuthentication/d' /etc/ssh/sshd_config && \
-    echo "PermitRootLogin no" >> /etc/ssh/sshd_config && \
-    echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config && \
-    echo "ClientAliveInterval 60" >> /etc/ssh/sshd_config
+RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip \
+    && unzip ngrok.zip \
+    && rm /ngrok.zip \
+    && mkdir /run/sshd \
+    && echo "/ngrok tcp --authtoken ${AUTH_TOKEN} 22 &" >>/docker.sh \
+    && echo "sleep 5" >> /docker.sh \
+    && echo "curl -s http://localhost:4040/api/tunnels | python3 -c \"import sys, json; print(\\\"SSH Info:\\\n\\\",\\\"ssh\\\",\\\"root@\\\"+json.load(sys.stdin)['tunnels'][0]['public_url'][6:].replace(':', ' -p '),\\\"\\\nROOT Password:${PASSWORD}\\\")\" || echo \"\nError：AUTH_TOKEN，Reset ngrok token & try\n\"" >> /docker.sh \
+    && echo '/usr/sbin/sshd -D' >>/docker.sh \
+    && echo 'PermitRootLogin yes' >> /etc/ssh/sshd_config \
+    && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
+    && echo root:${PASSWORD}|chpasswd \
+    && chmod 755 /docker.sh
 
-# Create user with password and give sudo access
-RUN useradd -m -s /bin/bash $USER && \
-    echo "$USER:$PASSWORD" | chpasswd && \
-    usermod -aG sudo $USER && \
-    chown -R $USER:$USER /home/$USER && \
-    echo "$USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-# Copy autoconnect/start script (if you have one)
-COPY start.sh /start.sh
-RUN chmod +x /start.sh && chown $USER:$USER /start.sh
-
-# Expose SSH port
-EXPOSE 22
-
-# Start SSH daemon
-CMD ["/start.sh"]
+EXPOSE 80 8888 8080 443 5130-5135 3306 7860
+CMD ["/bin/bash", "/docker.sh"]
