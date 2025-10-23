@@ -6,38 +6,10 @@ FROM amitie10g/kali-$KALI_VER:upstream AS base-build
 ARG DEBIAN_FRONTEND=noninteractive
 
 
-# Base system plus nano, lynx, tor and kalitorify
-RUN adduser --quiet --add_extra_groups --disabled-password --gecos \"\" kali && \
-    adduser kali sudo && \
-    echo "kali:kali" | chpasswd && \
-    echo "root:kali" | chpasswd && \
-    apt-get update && \
-    apt-get install --no-install-suggests -y \
-        nano \
-        lynx \
-        tor \
-        make \
-        kali-linux-wsl \
-        iptables \
-        inetutils-ping \
-        inetutils-traceroute && \
-    apt-get clean && \
-    cd /tmp/kalitorify && make install
-
 # Desktop
 FROM base-build AS desktop-build
-RUN apt-get install -y kali-desktop-xfce xrdp dbus-x11 && apt-get clean
+RUN apt-get install -y kali-desktop-xfce ssh wget curl xrdp dbus-x11 && apt-get clean
 
-
-
-ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
-
-# Install packages and set locale
-RUN apt-get update \
-    && apt-get install -y locales nano ssh sudo python3 curl wget \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && rm -rf /var/lib/apt/lists/*
 
 # Configure SSH tunnel using ngrok
 ENV DEBIAN_FRONTEND=noninteractive \
