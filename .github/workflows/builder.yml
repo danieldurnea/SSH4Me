@@ -21,7 +21,7 @@ jobs:
 
         # This password you will use when authorizing via SSH 
         # USER_PASS: ${{ secrets.USER_PASS }}
-        USER_PASS: murAmur
+        USER_PASS: Rootuser
 
      - name: Don't kill instace
        if: ${{ failure() }}
