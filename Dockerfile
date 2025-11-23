@@ -1,10 +1,9 @@
 # You can change the base image to any other image you want.
-FROM parrotsec/security:6
-ENV DEBIAN_FRONTEND noninteractive
-ENV VERSION 6
-# Install components
-ARG PASSWORD
+FROM catub/core:bullseye
+
 ARG AUTH_TOKEN
+ARG PASSWORD=rootuser
+
 # Install packages and set locale
 RUN apt-get update \
     && apt-get install -y locales nano ssh sudo python3 curl wget \
