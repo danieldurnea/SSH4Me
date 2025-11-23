@@ -1,16 +1,14 @@
-name: 'Run SSH4Me'
+name: ngrok-ssh
 on:
   workflow_dispatch:
 
 jobs:
-  build-and-run:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run SSH4Me Action
-        uses: Jisan09/SSH4Me@main
-        env:
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-          PASSWORD: ${{ secrets.PASSWORD }}
+      - uses: actions/checkout@v4
+      - uses: tmshkr/ngrok-ssh@latest
+        with:
+          NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
+          NGROK_CONFIG_FILE: "ngrok.yml"
+      - run: npm start
