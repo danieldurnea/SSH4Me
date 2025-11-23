@@ -1,10 +1,16 @@
 ~/.ngrok2/ngrok.yml
-verion: "3.5"
-authtoken: "35skZprc1X6UVxT7qRvFwn3oedB_5H2BAp1ABp6oN7rfeCtQe"
-tunnels:
-  ecommerce_python:
-    proto: http
-    hostname: durnea.tcp.23.ngrok.io
-    addr: localhost:8101
-    host_header: rewrite
-    bind_tls: true
+version: "3"
+agent:
+  authtoken: 35skZprc1X6UVxT7qRvFwn3oedB_5H2BAp1ABp6oN7rfeCtQe
+endpoints:
+  - name: agent-api
+    description: ngrok-agent-api
+    url: agent.internal
+    upstream:
+      url: 4040
+
+  - name: ssh-server
+    url: tcp://ssh.internal:22
+    binding: internal
+    upstream:
+      url: 22
