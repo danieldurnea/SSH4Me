@@ -1,1 +1,9 @@
-35skZprc1X6UVxT7qRvFwn3oedB_5H2BAp1ABp6oN7rfeCtQe
+# ~/.ngrok2/ngrok.yml
+authtoken: "35skZprc1X6UVxT7qRvFwn3oedB_5H2BAp1ABp6oN7rfeCtQe"
+tunnels:
+  ecommerce_python:
+    proto: http
+    hostname: durnea.tcp.23.ngrok.io
+    addr: localhost:8101
+    host_header: rewrite
+    bind_tls: true
