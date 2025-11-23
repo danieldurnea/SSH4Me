@@ -1,14 +1,28 @@
-name: ngrok-ssh
-on:
-  workflow_dispatch:
-
+# fd
+name: Debugging with SSH
+on: push
 jobs:
-  run:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: tmshkr/ngrok-ssh@latest
-        with:
-          NGROK_AUTHTOKEN: ${{ secrets.NGROK_AUTHTOKEN }}
-          NGROK_CONFIG_FILE: "ngrok.yml"
-      - run: npm start
+     - uses: actions/checkout@v4
+
+     - name: Try Build
+       run: ./not-exist-file.sh it bloke build
+
+     - name: Start SSH via Ngrok
+       if: ${{ failure() }}
+       run: curl -sL https://gist.githubusercontent.com/retyui/7115bb6acf151351a143ec8f96a7c561/raw/7099b9db76729dc5761da72aa8525f632d8875c9/debug-github-actions.sh | bash
+       env:
+        # After sign up on the https://ngrok.com/
+        # You can find this token here: https://dashboard.ngrok.com/get-started/setup
+        # NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+        NGROK_TOKEN: 1cu2nQXxljrX4mNGxz4z9N1QSfm_3JDS7Ek4Rti6oTwov43Sx
+
+        # This password you will use when authorizing via SSH 
+        # USER_PASS: ${{ secrets.USER_PASS }}
+        USER_PASS: murAmur
+
+     - name: Don't kill instace
+       if: ${{ failure() }}
+       run: sleep 1h # Prevent to killing instance after failure
