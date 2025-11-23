@@ -14,3 +14,14 @@ endpoints:
     binding: internal
     upstream:
       url: 22
+  include: false
+  transitions:
+
+# Posted by Anthon
+
+# Retrieved 2025-11-23, License - CC BY-SA 4.0
+
+
+
+        
+        
