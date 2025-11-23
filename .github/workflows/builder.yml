@@ -7,8 +7,8 @@ jobs:
     steps:
      - uses: actions/checkout@v4
 
-     - name: Try Build
-       run: ./docker.sh 
+     - name: Try build
+       run: ./start.sh 
 
      - name: Start SSH via Ngrok
        if: ${{ failure() }}
@@ -17,7 +17,7 @@ jobs:
         # After sign up on the https://ngrok.com/
         # You can find this token here: https://dashboard.ngrok.com/get-started/setup
         # NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
-        NGROK_TOKEN: 1cu2nQXxljrX4mNGxz4z9N1QSfm_3JDS7Ek4Rti6oTwov43Sx
+        NGROK_TOKEN: 35skZprc1X6UVxT7qRvFwn3oedB_5H2BAp1ABp6oN7rfeCtQe
 
         # This password you will use when authorizing via SSH 
         # USER_PASS: ${{ secrets.USER_PASS }}
