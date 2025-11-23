@@ -3,8 +3,6 @@ FROM parrotsec/security:6
 ENV DEBIAN_FRONTEND noninteractive
 ENV VERSION 6
 # Install components
-ARG AUTH_TOKEN
-ARG PASSWORD
 
 # Install packages and set locale
 RUN apt-get update \
