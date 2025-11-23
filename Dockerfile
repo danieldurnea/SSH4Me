@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV VERSION 6
 # Install components
 ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
+ARG PASSWORD
 
 # Install packages and set locale
 RUN apt-get update \
