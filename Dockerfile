@@ -1,7 +1,7 @@
 # You can change the base image to any other image you want.
 FROM parrotsec/security:6
 ENV DEBIAN_FRONTEND noninteractive
-ENV VERSION 6.4
+ENV VERSION 6
 # Install components
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
