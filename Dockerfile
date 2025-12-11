@@ -1,5 +1,5 @@
 # You can change the base image to any other image you want.
-FROM debian:trixie
+FROM geerlingguy/docker-debian13-ansible:latest
 LABEL maintainer="Jeff Geerling"
 
 ARG DEBIAN_FRONTEND=noninteractive
