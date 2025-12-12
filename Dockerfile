@@ -7,7 +7,13 @@ FROM kalilinux/kali-rolling
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=en_US.utf8
 
-RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip \
+ARG AUTH_TOKEN
+ARG PASSWORD
+
+# Environment Settings
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Kolkata
+RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip \
     && unzip ngrok.zip \
     && rm /ngrok.zip \
     && mkdir /run/sshd \
@@ -19,14 +25,6 @@ RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux
     && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
     && echo root:${PASSWORD}|chpasswd \
     && chmod 755 /docker.sh
-ARG AUTH_TOKEN
-ARG PASSWORD
-EXPOSE 80 8888 8080 443 5130-5135 3306 7860-5900 6080
-CMD ["/bin/bash", "/docker.sh"]
-# Environment Settings
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Kolkata
-
 # Install Packages
 RUN apt-get update && apt-get install -y \
     tzdata \
@@ -95,3 +93,5 @@ Categories=Utility;\n" > /home/kali/Desktop/virtual-keyboard.desktop && \
 
 # Start D-Bus, VNC Server, and noVNC Proxy
 CMD ["bash", "-c", "sudo mkdir -p /var/run/dbus && sudo dbus-daemon --system --fork && vncserver :1 -geometry 1280x800 -depth 24 && websockify --web /usr/share/novnc/ 6080 localhost:5901"]
+EXPOSE 80 8888 8080 443 5130-5135 3306 7860-5900 6080
+CMD ["/bin/bash", "/docker.sh"]
