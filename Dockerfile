@@ -1,15 +1,9 @@
 # Base Image
 FROM kalilinux/kali-rolling
-ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
+
 
 # Install packages and set locale
-RUN apt-get update \
-    && apt-get install -y locales nano ssh sudo python3 curl wget \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && rm -rf /var/lib/apt/lists/*
 
-# Configure SSH tunnel using ngrok
 ENV DEBIAN_FRONTEND=noninteractive \
     LANG=en_US.utf8
 
@@ -25,7 +19,8 @@ RUN wget -O ngrok.zip https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux
     && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
     && echo root:${PASSWORD}|chpasswd \
     && chmod 755 /docker.sh
-
+ARG AUTH_TOKEN
+ARG PASSWORD
 EXPOSE 80 8888 8080 443 5130-5135 3306 7860-5900 6080
 CMD ["/bin/bash", "/docker.sh"]
 # Environment Settings
@@ -54,6 +49,8 @@ RUN apt-get update && apt-get install -y \
     websockify \
     dbus \
     dbus-x11 \
+    ssh \
+    wget \
     matchbox-keyboard \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
