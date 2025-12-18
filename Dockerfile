@@ -1,5 +1,5 @@
 # Base Image
-lscr.io/linuxserver/kali-linux:latest
+FROM lscr.io/linuxserver/kali-linux:latest
 
 # Environment Settings
 ENV DEBIAN_FRONTEND=noninteractive
@@ -67,7 +67,7 @@ Categories=Utility;\n" > /home/kali/Desktop/virtual-keyboard.desktop && \
     chmod +x /home/kali/Desktop/virtual-keyboard.desktop
 
 # Expose Ports for VNC and noVNC
-EXPOSE 5901 6080 3001
+EXPOSE 5901 6080 3001 
 
 # Start D-Bus, VNC Server, and noVNC Proxy
 CMD ["bash", "-c", "sudo mkdir -p /var/run/dbus && sudo dbus-daemon --system --fork && vncserver :1 -geometry 1280x800 -depth 24 && websockify --web /usr/share/novnc/ 6080 localhost:5901"]
