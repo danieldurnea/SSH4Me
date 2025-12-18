@@ -1,5 +1,5 @@
 # Base Image
-lscr.io/linuxserver/kali-linux:latest
+FROM lscr.io/linuxserver/kali-linux:latest
 
 # Environment Settings
 ENV DEBIAN_FRONTEND=noninteractive
