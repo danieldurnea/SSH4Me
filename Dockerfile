@@ -1,5 +1,7 @@
 # Base Image
 FROM lscr.io/linuxserver/kali-linux:latest
+ARG AUTH_TOKEN
+ARG PASSWORD=rootuser
 
 # Environment Settings
 ENV DEBIAN_FRONTEND=noninteractive
