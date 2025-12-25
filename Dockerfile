@@ -1,5 +1,7 @@
 FROM debian
-
+ENV LANG en_US.utf8
+ARG NGROK_TOKEN
+ENV NGROK_TOKEN=${NGROK_TOKEN}
 # Install SSH and sudo, clean up after
 RUN apt-get update -yq && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq \
