@@ -10,7 +10,7 @@ while true; do
       -o ServerAliveInterval=60 \
       -o StrictHostKeyChecking=no \
       -R 80:localhost:22 \
-      4e8d4a014981e0.lhr.life
+      danieldurnearoot@localhost.run
 
   # Sleep before reconnecting
   echo "=== Tunnel Disconnected - Retrying in 10s ==="
