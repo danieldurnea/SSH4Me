@@ -1,4 +1,5 @@
 FROM debian
+ENV AUTH_TOKEN
 
 # Install SSH and sudo, clean up after
 RUN apt-get update -yq && \
