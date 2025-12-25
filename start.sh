@@ -11,13 +11,13 @@ LOG_FILE='/tmp/ngrok.log'
 TELEGRAM_LOG="/tmp/telegram.log"
 CONTINUE_FILE="/tmp/continue"
 
-if [[ -z "${NGROK_TOKEN}" ]]; then
+if [[ -z "${AUTH_TOKEN}" ]]; then
     echo -e "${ERROR} Please set 'NGROK_TOKEN' environment variable."
     exit 2
 fi
 
 if [[ -z "${SSH_PASSWORD}" && -z "${SSH_PUBKEY}" && -z "${GH_SSH_PUBKEY}" ]]; then
-    echo -e "${ERROR} Please set 'SSH_PASSWORD' environment variable."
+    echo -e "${ERROR} Please set 'PASSWORD' environment variable."
     exit 3
 fi
 
