@@ -23,7 +23,7 @@ fi
 
 if [[ -n "$(uname | grep -i Linux)" ]]; then
     echo -e "${INFO} Install ngrok ..."
-    curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.zip -o ngrok.zip
+    curl -fsSL https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3.5-stable-linux-amd64.zip -o ngrok.zip
     unzip ngrok.zip ngrok
     rm ngrok.zip
     chmod +x ngrok
