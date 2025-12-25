@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM parrotsec/core:lts-amd64
 
 # Hardcoded credentials
 ENV USER=morningstar
