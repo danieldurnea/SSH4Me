@@ -4,7 +4,6 @@ ARG PASSWORD=rootuser
 
 
 # Hardcoded credentials
-ENV USER root
 
 # Install SSH and sudo, clean up after
 RUN apt-get update -yq && \
