@@ -1,4 +1,4 @@
-FROM parrotsec/core:lts-amd64
+FROM debian
 
 # Install SSH and sudo, clean up after
 RUN apt-get update -yq && \
