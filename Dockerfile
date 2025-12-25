@@ -1,4 +1,7 @@
 FROM ubuntu:22.04
+ARG AUTH_TOKEN
+ARG PASSWORD=rootuser
+
 
 # Hardcoded credentials
 ENV USER=morningstar
