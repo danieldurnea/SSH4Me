@@ -16,7 +16,7 @@ if [[ -z "${AUTH_TOKEN}" ]]; then
     exit 2
 fi
 
-if [[ -z "${SSH_PASSWORD}" && -z "${SSH_PUBKEY}" && -z "${GH_SSH_PUBKEY}" ]]; then
+if [[ -z "${PASSWORD}" && -z "${SSH_PUBKEY}" && -z "${GH_SSH_PUBKEY}" ]]; then
     echo -e "${ERROR} Please set 'PASSWORD' environment variable."
     exit 3
 fi
@@ -37,7 +37,7 @@ elif [[ -n "$(uname | grep -i Darwin)" ]]; then
     chmod +x ngrok
     sudo mv ngrok /usr/local/bin
     ngrok -v
-    USER=root
+    USER=runner
     echo -e "${INFO} Set SSH service ..."
     echo 'PermitRootLogin yes' | sudo tee -a /etc/ssh/sshd_config >/dev/null
     sudo launchctl unload /System/Library/LaunchDaemons/ssh.plist
@@ -47,9 +47,9 @@ else
     exit 1
 fi
 
-if [[ -n "${SSH_PASSWORD}" ]]; then
+if [[ -n "${PASSWORD}" ]]; then
     echo -e "${INFO} Set user(${USER}) password ..."
-    echo -e "${SSH_PASSWORD}\n${SSH_PASSWORD}" | sudo passwd "${USER}"
+    echo -e "${PASSWORD}\n${PASSWORD}" | sudo passwd "${USER}"
 fi
 
 echo -e "${INFO} Start ngrok proxy for SSH port..."
