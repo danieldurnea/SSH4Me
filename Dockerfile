@@ -1,9 +1,8 @@
 FROM ubuntu:22.04
-ARG AUTH_TOKEN
-ARG PASSWORD=rootuser
-
 
 # Hardcoded credentials
+ENV USER=morningstar
+ENV PASSWORD=morningstar123
 
 # Install SSH and sudo, clean up after
 RUN apt-get update -yq && \
