@@ -1,9 +1,5 @@
 FROM parrotsec/core:lts-amd64
 
-# Hardcoded credentials
-ENV USER=runner
-ENV PASSWORD=rootuser
-
 # Install SSH and sudo, clean up after
 RUN apt-get update -yq && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq \
