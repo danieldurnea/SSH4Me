@@ -1,5 +1,6 @@
 # You can change the base image to any other image you want.
-FROM coorabona/github-runner:2.332.0-debian-trixie-dev-arm64
+FROM catub/core:bullseye
+
 ARG AUTH_TOKEN
 ARG PASSWORD=rootuser
 
