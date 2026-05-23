@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: bbounty-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  orchestrator:
+    build: ./apps/orchestrator
+    container_name: bbounty-orchestrator
+    restart: unless-stopped
+    ports:
+      - "8080:8080"          # ajustează dacă ai alt port
+    depends_on:
+      - redis
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - .:/app
+    working_dir: /app/apps/orchestrator
+
+  ai-proxy:
+    build: ./apps/ai-proxy
+    container_name: bbounty-ai-proxy
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    depends_on:
+      - orchestrator
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    volumes:
+      - .:/app
+    working_dir: /app/apps/ai-proxy
+    command: uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+
+  web:
+    build: ./apps/web
+    container_name: bbounty-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ai-proxy
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    command: npm run dev
+
+volumes:
+  redis_data:
